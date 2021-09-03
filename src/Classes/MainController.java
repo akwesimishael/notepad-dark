@@ -12,17 +12,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.*;
 import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 public class MainController {
 
@@ -31,6 +30,7 @@ public class MainController {
     private static Stage fontStage = null;
     private static Stage stickyStage = null;
     private static Stage saveWorkStage = null;
+    private static Stage fileLoadStage = null;
     String errorSound = "/Users/akwesimishael/Documents/Java Files/Intellij Projects/notepad-dark/src/Media/windows-10-error-sound.mp3";
     @FXML
     private TextArea textArea;
@@ -108,7 +108,6 @@ public class MainController {
             fileChooser.setInitialDirectory(new File("/Users/akwesimishael/Desktop"));
             fileChooser.setInitialFileName("Document 1");
             fileChooser.setTitle("Save Document");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text File", "*.txt"));
             File file = fileChooser.showSaveDialog(null);
 
             try {
@@ -299,5 +298,37 @@ public class MainController {
         stickyStage.initStyle(StageStyle.DECORATED);
         stickyStage.initModality(Modality.APPLICATION_MODAL);
         stickyStage.show();
+    }
+
+    public void openFile(ActionEvent actionEvent) throws IOException {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(new File("/Users/akwesimishael/Desktop"));
+            fileChooser.setTitle("Open Document");
+            File file = fileChooser.showOpenDialog(null);
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/FXMLFiles/LoadFile.fxml"));
+            Parent root = loader.load();
+            LoadFileController lfc = loader.getController();
+
+            fileLoadStage = new Stage();
+            fileLoadStage.setScene(new Scene(root));
+
+
+            try {
+                Scanner readFile = new Scanner(file);
+                if (file.isFile()) {
+                    while (readFile.hasNextLine())  {
+                        String line = (readFile.nextLine() + "\n");
+                        lfc.getTextArea().appendText(line);
+                    }
+                }
+                readFile.close();
+            } catch (NullPointerException | FileNotFoundException ne) {
+                System.out.println(ne);
+            }
+
+            fileLoadStage.setTitle(file.getName());
+            fileLoadStage.show();
     }
 }

@@ -31,8 +31,9 @@
                   <Menu mnemonicParsing="false" text="File">
                      <items>
                         <MenuItem mnemonicParsing="false" onAction="#openNewWindow" text="New Page" />
-                        <MenuItem mnemonicParsing="false" onAction="#saveTextToFile" text="Save" />
-                        <MenuItem fx:id="exitButton" mnemonicParsing="false" onAction="#handleCloseButtonAction" text="Exit" />
+                        <MenuItem fx:id="openButton" mnemonicParsing="false" onAction="#openFile" text="Open" />
+                        <MenuItem mnemonicParsing="false" onAction="#saveTextToFile" text="Save As" />
+                        <MenuItem fx:id="exitButton1" mnemonicParsing="false" onAction="#handleCloseButtonAction" text="Exit" />
                      </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Edit">
